@@ -1,0 +1,1086 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kuis Sistem Pencernaan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: satu kolom 880px. Jalur pencernaan tipis (mulut sampai usus besar) menjadi penanda kemajuan; kartu hanya dipakai untuk form dan soal. */
+:root {
+  --bg: #F2F6F5;
+  --surface: #FFFFFF;
+  --surface-2: #E7EFED;
+  --ink: #12221F;
+  --ink-2: #485E5A;
+  --line: #D1DDDA;
+  --accent: #0B6E8A;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #D8EDF3;
+  --good: #1B7F3A;
+  --good-soft: #DCF2E3;
+  --bad: #B73628;
+  --bad-soft: #FADFDB;
+  --warn: #8F5A00;
+  --warn-soft: #FAEDCB;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1B1A; --surface: #14282A; --surface-2: #1B3235; --ink: #E6F1EF; --ink-2: #9DB5B1;
+    --line: #28443F; --accent: #52C1DE; --accent-ink: #05222B; --accent-soft: #123942;
+    --good: #5CCB7F; --good-soft: #153A24; --bad: #F0806F; --bad-soft: #43201B; --warn: #E3B04B; --warn-soft: #3D2F10;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1B1A; --surface: #14282A; --surface-2: #1B3235; --ink: #E6F1EF; --ink-2: #9DB5B1;
+  --line: #28443F; --accent: #52C1DE; --accent-ink: #05222B; --accent-soft: #123942;
+  --good: #5CCB7F; --good-soft: #153A24; --bad: #F0806F; --bad-soft: #43201B; --warn: #E3B04B; --warn-soft: #3D2F10;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 15px/1.55 var(--font-body);
+  padding-block: 20px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(26px, 5vw, 38px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 20px; font-weight: 700; }
+h3 { font-size: 16px; font-weight: 700; }
+p { margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.muted { color: var(--ink-2); }
+.small { font-size: 13px; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lead { font-size: 17px; max-width: 62ch; color: var(--ink-2); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.btn { font: inherit; font-weight: 600; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn:hover { border-color: var(--accent); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-danger { border-color: var(--bad); color: var(--bad); }
+.btn-sm { min-height: 34px; padding: 0 12px; font-size: 13px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+label { font-weight: 600; font-size: 14px; }
+input[type="text"], input[type="number"], input[type="search"], select, textarea {
+  font: inherit; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 10px; min-height: 44px; padding: 8px 12px; width: 100%;
+}
+textarea { min-height: 96px; resize: vertical; font-family: var(--mono); font-size: 12px; }
+.err { color: var(--bad); font-weight: 500; }
+.facts { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.facts li, .chip { background: var(--surface-2); border-radius: 999px; padding: 4px 12px; font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.facts strong { color: var(--ink); }
+.chip-topic { background: var(--accent-soft); color: var(--accent); font-weight: 600; white-space: normal; }
+.topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.topics div { border-top: 2px solid var(--accent); padding-top: 8px; }
+.topics dt { font-weight: 700; font-family: var(--font-display); }
+.topics dd { margin: 2px 0 0; color: var(--ink-2); font-size: 13px; }
+.topics dl { margin: 0; display: contents; }
+
+/* Jalur pencernaan */
+.jalur { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.jl-track { position: relative; height: 6px; background: var(--surface-2); border-radius: 999px; }
+.jl-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--accent); border-radius: 999px; transition: width 0.25s ease; }
+.jl-dot { position: absolute; top: 50%; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg); transform: translate(-50%, -50%); transition: left 0.25s ease; }
+.jl-nodes { display: flex; justify-content: space-between; list-style: none; padding: 0; margin: 0; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.jl-nodes li.on { color: var(--accent); font-weight: 600; }
+
+/* Kuis */
+.statusbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding-block: 8px 10px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.sb-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sb-who { min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.sb-who strong { overflow-wrap: anywhere; }
+.sb-who span { font-size: 12px; color: var(--ink-2); }
+.sb-meta { display: flex; gap: 8px; }
+.q-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.q-no { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.q-text { font-size: 17px; line-height: 1.6; max-width: 70ch; overflow-wrap: anywhere; }
+.tscroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: var(--surface-2); font-weight: 600; font-size: 13px; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { font: inherit; text-align: left; width: 100%; display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; cursor: pointer; min-height: 48px; overflow-wrap: anywhere; }
+.opt:hover { border-color: var(--accent); }
+.opt .ltr { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--line); font: 700 13px var(--font-display); }
+.opt .ot { flex: 1; min-width: 0; padding-top: 2px; }
+.opt.on { border-color: var(--accent); background: var(--accent-soft); }
+.opt.on .ltr { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.opt.static { cursor: default; }
+.opt.static:hover { border-color: var(--line); }
+.opt.kunci { border-color: var(--good); background: var(--good-soft); }
+.opt.kunci .ltr { background: var(--good); border-color: var(--good); color: var(--bg); }
+.opt.salah { border-color: var(--bad); background: var(--bad-soft); }
+.opt.salah .ltr { background: var(--bad); border-color: var(--bad); color: var(--bg); }
+.opt .tag { flex: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 4px; }
+.navrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; }
+.gb { font: 600 13px var(--font-body); font-variant-numeric: tabular-nums; min-height: 40px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; cursor: pointer; position: relative; }
+.gb.done { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.gb.cur { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.gb.flag::after { content: ""; position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--ink-2); }
+.konfirm { border-color: var(--warn); background: var(--warn-soft); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* Hasil */
+.skor { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.skor-n { font: 800 clamp(56px, 14vw, 88px)/1 var(--font-display); color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat3 > div, .stats > div { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+.stat3 b, .stats b { display: block; font: 700 22px var(--font-display); font-variant-numeric: tabular-nums; }
+.stat3 span, .stats span { font-size: 12px; color: var(--ink-2); }
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: minmax(110px, 190px) 1fr 56px; gap: 10px; align-items: center; font-size: 14px; }
+.bar { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.bar-row .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.notice { border-radius: 10px; padding: 12px 14px; background: var(--surface-2); font-size: 14px; }
+.notice.ok { background: var(--good-soft); color: var(--good); }
+.notice.bad { background: var(--bad-soft); color: var(--bad); }
+.notice.warn { background: var(--warn-soft); color: var(--warn); }
+.review { display: flex; flex-direction: column; gap: 14px; }
+.rv { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--surface); display: flex; flex-direction: column; gap: 10px; }
+.rv .e { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+.rv .e b { color: var(--accent); }
+.seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg button { font: inherit; font-size: 14px; border: 0; background: var(--surface); color: var(--ink); padding: 8px 14px; min-height: 40px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+/* Panel guru */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.tabs button { font: inherit; font-weight: 600; font-size: 14px; border: 0; background: transparent; color: var(--ink-2); padding: 8px 14px; border-radius: 8px; min-height: 40px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
+.panel { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.chk { display: flex; gap: 8px; align-items: center; font-weight: 500; min-height: 44px; }
+.chk input { width: 18px; height: 18px; }
+.detail { display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap: 4px; padding: 6px 0; }
+.dc { border-radius: 6px; padding: 3px 0; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; background: var(--surface-2); color: var(--ink-2); }
+.dc.ok { background: var(--good-soft); color: var(--good); }
+.dc.no { background: var(--bad-soft); color: var(--bad); }
+.pill { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+.pill.no { background: var(--bad-soft); color: var(--bad); }
+.pill.mid { background: var(--warn-soft); color: var(--warn); }
+.mini { display: inline-block; width: 90px; height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; vertical-align: middle; }
+.mini > i { display: block; height: 100%; background: var(--accent); }
+.keyline { font-family: var(--mono); font-size: 13px; background: var(--surface-2); padding: 12px; border-radius: 10px; overflow-wrap: anywhere; line-height: 1.8; }
+@media (max-width: 520px) {
+  .bar-row { grid-template-columns: 1fr 56px; }
+  .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
+  .card { padding: 16px; }
+  .q-text { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .jl-fill, .jl-dot { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Biologi · Kelas XI</p>
+      <h1>Kuis Sistem Pencernaan</h1>
+    </div>
+    <button id="btn-guru" class="btn" type="button" hidden>Panel guru</button>
+  </header>
+
+  <section id="s-mulai">
+    <p class="lead">50 soal HOTS literasi numerasi tentang organ, bioproses, zat makanan, dan kelainan pada sistem pencernaan. Baca data dengan teliti, hitung, lalu pilih satu jawaban dari lima pilihan.</p>
+    <ul class="facts">
+      <li><strong>50</strong> soal</li>
+      <li><strong>5</strong> pilihan (A–E)</li>
+      <li><strong>2</strong> poin tiap jawaban benar</li>
+      <li>Tanpa pengurangan nilai untuk jawaban salah</li>
+    </ul>
+    <form id="form-mulai" class="card" novalidate>
+      <h2>Data peserta</h2>
+      <div class="field">
+        <label for="nama">Nama lengkap</label>
+        <input id="nama" type="text" maxlength="60" autocomplete="name" placeholder="contoh: Siti Aisyah">
+      </div>
+      <div class="field">
+        <label for="kelas">Kelas</label>
+        <input id="kelas" type="text" maxlength="20" list="daftar-kelas" placeholder="contoh: XI MIPA 2">
+        <datalist id="daftar-kelas">
+          <option value="XI MIPA 1"></option><option value="XI MIPA 2"></option><option value="XI MIPA 3"></option>
+          <option value="XI MIPA 4"></option><option value="XI MIPA 5"></option><option value="XI MIPA 6"></option>
+        </datalist>
+      </div>
+      <p id="err-mulai" class="err" role="alert" hidden></p>
+      <div class="row">
+        <button class="btn btn-primary" type="submit">Mulai kuis</button>
+        <span id="info-simpan" class="small muted"></span>
+      </div>
+    </form>
+    <dl class="topics" id="daftar-topik"></dl>
+  </section>
+
+  <section id="s-kuis" hidden>
+    <div class="statusbar">
+      <div class="sb-row">
+        <div class="sb-who"><strong id="sb-nama"></strong><span id="sb-kelas"></span></div>
+        <div class="sb-meta">
+          <span class="chip" id="sb-jawab">0/50 terjawab</span>
+          <span class="chip mono" id="waktu">00:00</span>
+        </div>
+      </div>
+      <div class="jalur" aria-hidden="true">
+        <div class="jl-track"><div class="jl-fill" id="jl-fill"></div><div class="jl-dot" id="jl-dot"></div></div>
+        <ol class="jl-nodes" id="jl-nodes">
+          <li>Mulut</li><li>Kerongkongan</li><li>Lambung</li><li>Usus halus</li><li>Usus besar</li>
+        </ol>
+      </div>
+    </div>
+    <article class="card" id="kartu-soal"></article>
+    <div class="navrow">
+      <button class="btn" id="btn-prev" type="button">← Sebelumnya</button>
+      <button class="btn" id="btn-ragu" type="button" aria-pressed="false">Tandai ragu-ragu</button>
+      <button class="btn btn-primary" id="btn-next" type="button">Berikutnya →</button>
+    </div>
+    <div class="card">
+      <h3>Daftar soal</h3>
+      <div class="grid" id="grid"></div>
+      <div class="legend">
+        <span>Biru muda: sudah dijawab</span><span>Biru tua: soal ini</span><span>Titik kuning: ragu-ragu</span>
+      </div>
+      <div class="row"><button class="btn btn-primary" id="btn-kumpul" type="button">Kumpulkan jawaban</button></div>
+    </div>
+    <div class="card konfirm" id="konfirm" hidden role="alert">
+      <h3>Kumpulkan sekarang?</h3>
+      <p id="konfirm-teks"></p>
+      <div class="row">
+        <button class="btn" id="btn-batal" type="button">Kembali memeriksa</button>
+        <button class="btn btn-primary" id="btn-ya" type="button">Ya, kumpulkan</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-hasil" hidden>
+    <div class="card">
+      <p class="eyebrow" id="h-ket"></p>
+      <div class="skor"><span class="skor-n" id="h-nilai">0</span><span class="muted">dari 100</span><span class="chip chip-topic" id="h-pred"></span></div>
+      <div class="stat3">
+        <div><b id="h-benar">0</b><span>Benar</span></div>
+        <div><b id="h-salah">0</b><span>Salah</span></div>
+        <div><b id="h-kosong">0</b><span>Kosong</span></div>
+      </div>
+      <p class="muted small" id="h-durasi"></p>
+    </div>
+    <div class="card">
+      <h3>Capaian tiap subtopik</h3>
+      <div class="bars" id="h-topik"></div>
+    </div>
+    <div class="card" id="h-simpan"></div>
+    <div class="row">
+      <h2 style="flex:1;min-width:160px">Pembahasan</h2>
+      <div class="seg" role="group" aria-label="Filter pembahasan">
+        <button type="button" id="f-semua" aria-pressed="true">Semua</button>
+        <button type="button" id="f-salah" aria-pressed="false">Salah / kosong</button>
+      </div>
+    </div>
+    <div class="review" id="h-review"></div>
+    <div class="row"><button class="btn" id="btn-berikut" type="button">Peserta berikutnya</button><span id="berikut-info" class="small muted"></span></div>
+  </section>
+
+  <section id="s-guru" hidden>
+    <div class="top">
+      <h2>Panel guru</h2>
+      <button class="btn" id="g-kembali" type="button">Kembali ke halaman kuis</button>
+    </div>
+    <p id="g-status" class="muted small" role="status"></p>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="hasil" aria-selected="true">Hasil siswa</button>
+      <button type="button" role="tab" data-tab="analisis" aria-selected="false">Analisis soal</button>
+      <button type="button" role="tab" data-tab="kunci" aria-selected="false">Kunci jawaban</button>
+      <button type="button" role="tab" data-tab="impor" aria-selected="false">Impor kode hasil</button>
+    </div>
+
+    <div id="tab-hasil" class="panel">
+      <div class="ctrls">
+        <div class="field"><label for="g-kelas">Kelas</label><select id="g-kelas"></select></div>
+        <div class="field"><label for="g-cari">Cari nama</label><input id="g-cari" type="search" placeholder="ketik nama"></div>
+        <div class="field"><label for="g-urut">Urutkan</label>
+          <select id="g-urut"><option value="nilai">Nilai tertinggi</option><option value="nama">Nama A–Z</option><option value="waktu">Paling baru</option></select></div>
+        <div class="field"><label for="g-kkm">KKM</label><input id="g-kkm" type="number" min="0" max="100" value="75"></div>
+      </div>
+      <label class="chk" for="g-terakhir"><input id="g-terakhir" type="checkbox" checked> Tampilkan hanya pengumpulan terakhir tiap siswa (nama + kelas sama)</label>
+      <div class="stats" id="g-stats"></div>
+      <div class="row"><button class="btn" id="g-csv" type="button">Unduh hasil (CSV)</button><span id="g-csv-info" class="small muted"></span></div>
+      <div class="tscroll"><table>
+        <thead><tr><th>No</th><th>Nama</th><th>Kelas</th><th class="num">Benar</th><th class="num">Nilai</th><th class="num">Durasi</th><th>Dikumpulkan</th><th>Aksi</th></tr></thead>
+        <tbody id="g-tbody"></tbody>
+      </table></div>
+    </div>
+
+    <div id="tab-analisis" class="panel" hidden>
+      <p class="muted small">Dihitung dari data yang sedang ditampilkan pada tab Hasil siswa (mengikuti filter kelas dan pilihan pengumpulan terakhir).</p>
+      <div class="bars" id="g-topik"></div>
+      <div class="tscroll"><table>
+        <thead><tr><th>No</th><th>Subtopik</th><th>Kunci</th><th>Benar</th><th>Tingkat</th><th>Pengecoh terbanyak</th></tr></thead>
+        <tbody id="g-butir"></tbody>
+      </table></div>
+    </div>
+
+    <div id="tab-kunci" class="panel" hidden>
+      <div class="keyline" id="g-keyline"></div>
+      <div class="row"><button class="btn" id="g-salin-kunci" type="button">Salin kunci</button><button class="btn" id="g-csv-kunci" type="button">Unduh kunci dan pembahasan (CSV)</button><span id="g-kunci-info" class="small muted"></span></div>
+      <div class="tscroll"><table>
+        <thead><tr><th>No</th><th>Kunci</th><th>Subtopik</th><th>Level</th><th>Pembahasan</th></tr></thead>
+        <tbody id="g-kunci-body"></tbody>
+      </table></div>
+      <p class="muted small">Level kognitif bersifat perkiraan: C4 menganalisis, C5 mengevaluasi dan mengambil keputusan.</p>
+    </div>
+
+    <div id="tab-impor" class="panel" hidden>
+      <p class="muted small">Siswa yang tidak dapat menyimpan langsung ke akun ini menerima kode hasil. Tempel satu atau beberapa kode (satu per baris), lalu impor. Nilai dihitung ulang dari jawaban dengan kunci di halaman ini.</p>
+      <div class="field"><label for="g-impor">Kode hasil</label><textarea id="g-impor" placeholder="SP1...."></textarea></div>
+      <div class="row"><button class="btn btn-primary" id="g-impor-btn" type="button">Impor</button><span id="g-impor-info" class="small muted" role="status"></span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+"use strict";
+/*SOAL-BEGIN*/
+const SOAL = [
+{ lv: 4, q: "Luas permukaan serap usus halus orang dewasa (dengan lipatan, vili, dan mikrovili) diperkirakan ±250 m², sedangkan luas permukaan kulit tubuh dewasa ±2 m². Luas permukaan serap usus halus kira-kira ... kali luas permukaan kulit.",
+  o: ["25 kali", "50 kali", "100 kali", "125 kali", "250 kali"], a: 3,
+  e: "250 m² ÷ 2 m² = 125 kali. Lipatan sirkular, vili, dan mikrovili memperluas bidang kontak dengan kimus sehingga penyerapan sangat efisien." },
+{ lv: 4, q: "Cairan lambung memiliki pH 2, sedangkan air liur (saliva) memiliki pH 7. Konsentrasi ion H⁺ cairan lambung dibandingkan air liur adalah ... kali lebih besar.",
+  o: ["5 kali", "10 kali", "100 kali", "10.000 kali", "100.000 kali"], a: 4,
+  e: "[H⁺] = 10^(−pH). pH 2 → 10⁻² M dan pH 7 → 10⁻⁷ M, sehingga perbandingannya 10⁵ = 100.000 kali. Keasaman setinggi ini mengaktifkan pepsinogen dan membunuh kuman yang ikut tertelan." },
+{ lv: 4, q: "Dinding usus halus pada sebuah preparat memiliki ±20 vili per mm². Jika segmen usus yang diamati seluas 2,5 cm², jumlah vili pada segmen tersebut kira-kira ...",
+  o: ["500 vili", "2.500 vili", "5.000 vili", "10.000 vili", "50.000 vili"], a: 2,
+  e: "2,5 cm² = 250 mm² (1 cm² = 100 mm²). Jumlah vili = 250 × 20 = 5.000. Vili memperluas permukaan penyerapan." },
+{ lv: 5, q: "Data ukuran saluran: usus halus panjang ±6 m dengan diameter ±2,5 cm; usus besar panjang ±1,5 m dengan diameter ±6 cm. Berdasarkan data tersebut, usus besar diberi nama “besar” karena ...",
+  o: ["luas permukaan serapnya lebih besar daripada usus halus", "diameternya sekitar 2,4 kali diameter usus halus, meskipun lebih pendek", "panjangnya empat kali panjang usus halus", "memiliki vili lebih banyak daripada usus halus", "menghasilkan lebih banyak enzim pencernaan daripada usus halus"], a: 1,
+  e: "Penamaan mengikuti diameter: 6 cm ÷ 2,5 cm = 2,4 kali. Usus besar justru 4 kali lebih pendek (6 m ÷ 1,5 m) dan fungsi utamanya menyerap air dan mineral, bukan menyerap zat makanan." },
+{ lv: 4, q: "Kantung empedu seorang pasien berisi 50 mL empedu pekat yang telah dipekatkan 10 kali dari empedu encer yang dihasilkan hati. Volume empedu encer dari hati yang setara dengan isi kantung tersebut adalah ...",
+  o: ["500 mL", "1.000 mL", "2.500 mL", "5.000 mL", "10.000 mL"], a: 0,
+  e: "Pemekatan 10 kali berarti 50 mL pekat berasal dari 50 × 10 = 500 mL empedu encer. Kantung empedu menyimpan dan memekatkan empedu dengan menyerap airnya." },
+{ lv: 4, q: "Perhatikan tabel aktivitas relatif tiga enzim pencernaan pada berbagai pH (100% = aktivitas maksimum). Sepotong nasi dengan lauk ayam tiba di lambung yang ber-pH ±2. Enzim yang paling dominan bekerja dan reaksinya adalah ...",
+  tb: { h: ["pH", "Pepsin", "Tripsin", "Amilase"], r: [["2", "100%", "5%", "10%"], ["7", "0%", "60%", "100%"], ["8", "0%", "100%", "60%"]] },
+  o: ["amilase; pati menjadi maltosa", "tripsin; protein menjadi pepton", "pepsin; protein menjadi pepton", "lipase; lemak menjadi asam lemak dan gliserol", "pepsin; pati menjadi glukosa"], a: 2,
+  e: "Pada pH 2 hanya pepsin yang aktif penuh (100%), sedangkan amilase 10% dan tripsin 5%. Pepsin mengubah protein (ayam) menjadi pepton. Pati pada nasi terutama dicerna amilase di mulut dan usus halus." },
+{ lv: 4, q: "Seorang peneliti mencatat lama kimus berada pada organ: lambung 3 jam, usus halus 4 jam, usus besar 30 jam. Persentase waktu yang dihabiskan di usus besar dari total waktu ketiga organ tersebut adalah ... (dibulatkan)",
+  o: ["30%", "45%", "60%", "81%", "90%"], a: 3,
+  e: "Total = 3 + 4 + 30 = 37 jam. 30 ÷ 37 × 100% ≈ 81%. Lamanya transit memberi waktu bagi usus besar menyerap air dan membentuk feses." },
+{ lv: 4, q: "Kerongkongan orang dewasa panjangnya ±25 cm. Gerak peristaltik mendorong bolus dengan kecepatan rata-rata 3 cm/detik. Waktu yang dibutuhkan bolus melewati kerongkongan sekitar ...",
+  o: ["3 detik", "8 detik", "12 detik", "25 detik", "75 detik"], a: 1,
+  e: "Waktu = jarak ÷ kecepatan = 25 ÷ 3 ≈ 8,3 detik. Peristaltik (kontraksi otot polos berurutan) membuat makanan tetap bergerak ke lambung walaupun posisi tubuh terbalik." },
+{ lv: 4, q: "Gigi dewasa berjumlah 32: 8 seri (insisivus), 4 taring (kaninus), 8 premolar, dan 12 molar. Seorang remaja kehilangan 2 geraham bungsu dan 1 premolar. Persentase gigi yang masih tersisa adalah ...",
+  o: ["84,4%", "87,5%", "90,6%", "93,8%", "96,9%"], a: 2,
+  e: "Gigi hilang = 3, tersisa = 32 − 3 = 29. 29 ÷ 32 × 100% ≈ 90,6%." },
+{ lv: 4, q: "Berdasarkan jumlah gigi manusia dewasa (seri 8, taring 4, premolar 8, molar 12), perbandingan jumlah gigi pemotong : pencabik : penggiling (premolar + molar) adalah ...",
+  o: ["1 : 1 : 2", "2 : 1 : 4", "4 : 2 : 5", "2 : 2 : 5", "2 : 1 : 5"], a: 4,
+  e: "Pemotong = 8, pencabik (taring) = 4, penggiling = 8 + 12 = 20. Perbandingan 8 : 4 : 20 disederhanakan (÷ 4) menjadi 2 : 1 : 5. Dominasi gigi penggiling sesuai dengan manusia sebagai omnivora." },
+{ lv: 4, q: "Curah jantung seseorang saat istirahat ±5 L/menit dan sekitar 25% darah tersebut mengalir ke hati (melalui vena porta hepatika dan arteri hepatika). Volume darah yang melewati hati dalam 1 jam adalah ...",
+  o: ["75 L", "125 L", "250 L", "500 L", "750 L"], a: 0,
+  e: "Aliran ke hati = 25% × 5 L/menit = 1,25 L/menit. Dalam 60 menit = 1,25 × 60 = 75 L. Aliran besar ini memungkinkan hati memproses zat hasil penyerapan dan menyimpan glikogen." },
+{ lv: 5, q: "Saat makan sambil berbicara dan tertawa, seseorang tersedak karena potongan nasi masuk ke saluran napas. Penjelasan yang paling tepat adalah ...",
+  o: ["epiglotis tidak sempat menutup laring saat bolus melewati faring sehingga makanan masuk ke trakea", "peristaltik kerongkongan berbalik arah sehingga bolus naik ke mulut", "sfingter pilorus terbuka sehingga isi lambung naik ke faring", "lidah gagal membentuk bolus sehingga makanan tidak dapat ditelan", "uvula menutup kerongkongan sehingga bolus masuk ke bronkus"], a: 0,
+  e: "Saat menelan, epiglotis menutup laring selama ±1 detik agar bolus masuk ke kerongkongan. Berbicara atau tertawa membuat glotis terbuka sehingga makanan dapat masuk ke trakea dan memicu refleks batuk. Peristaltik, pilorus, dan uvula tidak berperan seperti pada pilihan lain." },
+{ lv: 4, q: "Siswa menguji kerja amilase air liur pada suspensi pati dengan indikator iodin. Waktu hingga warna biru-hitam hilang (pati habis) dicatat pada beberapa suhu. Simpulan yang paling tepat dari data berikut adalah ...",
+  tb: { h: ["Suhu", "Waktu warna biru-hitam hilang"], r: [["0 °C", "Belum hilang setelah 30 menit"], ["37 °C", "4 menit"], ["60 °C", "Belum hilang setelah 30 menit"], ["100 °C", "Belum hilang setelah 30 menit"]] },
+  o: ["Amilase bekerja sama baik pada semua suhu.", "Semakin tinggi suhu, semakin cepat amilase mencerna pati.", "Suhu tidak memengaruhi kerja amilase.", "Amilase hanya dapat bekerja pada suhu rendah.", "Amilase bekerja optimum pada suhu sekitar suhu tubuh; suhu rendah menghambat dan suhu tinggi merusak struktur enzim."], a: 4,
+  e: "Hanya pada 37 °C pati habis (4 menit). Suhu 0 °C memperlambat reaksi, sedangkan 60 °C dan 100 °C mendenaturasi enzim sehingga pati tidak tercerna. Enzim memiliki suhu optimum." },
+{ lv: 5, q: "Perhatikan hasil uji iodin pada empat tabung. Perbandingan dua tabung yang tepat untuk menyimpulkan pengaruh pH terhadap kerja amilase adalah ...",
+  tb: { h: ["Tabung", "Isi", "Warna setelah ditetesi iodin"], r: [["A", "Pati + saliva (pH 7)", "Cokelat kekuningan"], ["B", "Pati + saliva + HCl (pH 2)", "Biru-hitam"], ["C", "Pati + saliva yang telah dididihkan", "Biru-hitam"], ["D", "Pati + akuades", "Biru-hitam"]] },
+  o: ["A dan D", "A dan C", "B dan C", "A dan B", "C dan D"], a: 3,
+  e: "Percobaan terkendali hanya mengubah satu variabel. Tabung A dan B sama-sama berisi pati + saliva dan hanya berbeda pH (7 dan 2). Pasangan A–D membandingkan ada atau tidaknya enzim, sedangkan A–C membandingkan pengaruh pemanasan." },
+{ lv: 5, q: "Seorang pasien mengonsumsi obat penghambat pompa proton sehingga pH lambungnya naik dari ±2 menjadi ±5. Pepsin bekerja optimum pada pH 1,5–2. Dampak langsung yang paling mungkin adalah ...",
+  o: ["pepsinogen tidak teraktivasi optimal menjadi pepsin sehingga pencernaan protein di lambung melambat", "pankreas berhenti menghasilkan tripsin", "hati tidak lagi menghasilkan empedu", "penyerapan glukosa di usus halus terhenti", "lipase lambung berubah menjadi pepsin"], a: 0,
+  e: "HCl mengubah pepsinogen menjadi pepsin aktif dan menciptakan pH optimum. Pada pH ±5 pepsin hampir tidak aktif sehingga pemecahan protein menjadi pepton di lambung menurun. Organ lain tidak langsung terpengaruh." },
+{ lv: 5, q: "Seorang pasien yang kandung empedunya diangkat (kolesistektomi) disarankan makan dalam porsi kecil tetapi sering dan membatasi makanan berlemak. Alasan yang paling tepat adalah ...",
+  o: ["hati berhenti menghasilkan empedu setelah kandung empedu diangkat", "empedu tetap dibuat hati tetapi tidak lagi disimpan dan dipekatkan sehingga emulsi lemak dalam jumlah besar tidak optimal", "pankreas tidak lagi menghasilkan lipase sehingga lemak tidak tercerna", "lemak tidak dapat dicerna sama sekali tanpa kandung empedu, meskipun hati masih berfungsi", "usus halus tidak mampu menyerap asam lemak tanpa kandung empedu"], a: 1,
+  e: "Hati terus membuat empedu, tetapi kandung empedu yang berfungsi menyimpan dan memekatkannya sudah tidak ada. Empedu mengalir sedikit demi sedikit ke duodenum sehingga lemak dalam jumlah besar sulit diemulsikan; porsi kecil dan rendah lemak mengurangi masalah itu." },
+{ lv: 4, q: "Butir lemak berdiameter 100 µm diemulsikan oleh garam empedu menjadi butir-butir berdiameter 1 µm dengan volume total tetap. Luas permukaan total lemak yang dapat dijangkau enzim lipase meningkat sekitar ... kali.",
+  o: ["2 kali", "10 kali", "50 kali", "100 kali", "1.000 kali"], a: 3,
+  e: "Untuk volume total tetap, luas permukaan total berbanding terbalik dengan diameter butir (A ∝ 1/d). Diameter mengecil 100 kali sehingga luas permukaan naik 100 kali dan lipase bekerja lebih cepat." },
+{ lv: 5, q: "Satu jam setelah makan, kadar tiga zat diukur pada vena porta hepatika dan pembuluh limfa (kil) usus. Simpulan yang tepat tentang jalur penyerapan adalah ...",
+  tb: { h: ["Zat", "Vena porta hepatika", "Pembuluh limfa (kil)"], r: [["Glukosa", "Tinggi", "Rendah"], ["Asam amino", "Tinggi", "Rendah"], ["Trigliserida dalam kilomikron", "Rendah", "Tinggi"]] },
+  o: ["Semua zat makanan, termasuk glukosa dan asam amino, diangkut melalui pembuluh limfa menuju jantung.", "Glukosa diangkut melalui pembuluh kil, sedangkan lemak diangkut melalui vena porta hepatika.", "Glukosa dan asam amino diangkut kapiler darah menuju hati lewat vena porta; lemak dikemas menjadi kilomikron dan diangkut pembuluh kil.", "Hanya asam amino yang melewati vena porta; glukosa dan lemak sama-sama melalui pembuluh limfa.", "Semua zat makanan langsung masuk ke hati tanpa melewati pembuluh darah maupun pembuluh limfa."], a: 2,
+  e: "Zat larut air (glukosa, asam amino) masuk kapiler darah vili dan menuju hati lewat vena porta hepatika. Asam lemak dan gliserol disusun kembali menjadi trigliserida, dikemas sebagai kilomikron, lalu masuk pembuluh kil (limfa) sebelum bergabung ke darah." },
+{ lv: 4, q: "Konsentrasi glukosa di lumen usus halus 5 mM, sedangkan di dalam sel epitel vili 20 mM, namun glukosa tetap terserap ke dalam sel. Mekanisme penyerapan yang paling mungkin adalah ...",
+  o: ["difusi sederhana", "osmosis", "fagositosis", "difusi terfasilitasi tanpa energi", "transpor aktif (bersama ion Na⁺) yang memerlukan energi"], a: 4,
+  e: "Glukosa berpindah dari konsentrasi rendah (5 mM) ke tinggi (20 mM), yaitu melawan gradien konsentrasi, sehingga memerlukan energi (ATP). Mekanismenya transpor aktif sekunder dengan kotranspor Na⁺." },
+{ lv: 4, q: "Kimus keluar dari lambung melalui sfingter pilorus dengan laju rata-rata 4 mL/menit. Jika volume kimus setelah makan 480 mL, waktu yang dibutuhkan untuk mengosongkan lambung kira-kira ...",
+  o: ["1 jam", "2 jam", "3 jam", "4 jam", "6 jam"], a: 1,
+  e: "Waktu = 480 mL ÷ 4 mL/menit = 120 menit = 2 jam. Pilorus melepaskan kimus sedikit demi sedikit agar usus halus tidak kewalahan." },
+{ lv: 5, q: "Seorang pasien mengonsumsi antibiotik spektrum luas dosis tinggi selama 3 minggu, lalu mengalami diare dan mudah memar. Kaitan yang paling tepat antara obat dan keluhannya adalah ...",
+  o: ["bakteri baik di usus besar, yang membantu menghasilkan vitamin K dan menjaga penyerapan air, ikut berkurang", "antibiotik menghancurkan enzim-enzim pankreas", "antibiotik meningkatkan produksi empedu secara berlebihan", "vitamin K langsung berubah menjadi vitamin C di usus", "hati menghasilkan bilirubin terlalu banyak akibat antibiotik"], a: 0,
+  e: "Flora normal usus besar (misalnya E. coli) menghasilkan vitamin K dan ikut menjaga keseimbangan penyerapan air. Antibiotik spektrum luas ikut membunuh bakteri baik sehingga vitamin K berkurang (mudah memar karena pembekuan darah terganggu) dan terjadi diare." },
+{ lv: 4, q: "Seseorang mengeluarkan feses ±150 g per hari dengan kadar air 75%. Massa bahan padat (sisa serat, bakteri, sel mati) dalam feses tersebut adalah ...",
+  o: ["15 g", "25 g", "37,5 g", "75 g", "112,5 g"], a: 2,
+  e: "Padatan = 25% × 150 g = 37,5 g. Air sebanyak 112,5 g (75%) menunjukkan feses normal; kadar air yang jauh lebih rendah menandakan konstipasi, sedangkan jauh lebih tinggi menandakan diare." },
+{ lv: 4, q: "Hidrolisis 1 mol sukrosa (massa 342 g) oleh sukrase menghasilkan 1 mol glukosa (180 g) dan 1 mol fruktosa (180 g). Total produk 360 g, lebih besar 18 g daripada massa sukrosa. Selisih massa tersebut berasal dari ...",
+  o: ["energi yang dibebaskan saat reaksi", "enzim sukrase yang ikut menjadi produk", "udara di dalam usus halus", "1 mol molekul air yang ikut bereaksi pada pemutusan ikatan glikosidik", "gas CO₂ hasil respirasi sel epitel"], a: 3,
+  e: "Hidrolisis berarti pemecahan dengan bantuan air. 1 mol air bermassa 18 g (2 + 16). Hukum kekekalan massa terpenuhi: 342 + 18 = 360 g." },
+{ lv: 4, q: "Satu rantai polipeptida tersusun atas 100 asam amino. Untuk menghidrolisis sempurna seluruh ikatan peptidanya oleh pepsin, tripsin, dan peptidase dibutuhkan ... molekul air.",
+  o: ["50", "99", "100", "198", "200"], a: 1,
+  e: "Rantai n asam amino memiliki (n − 1) ikatan peptida. 100 asam amino → 99 ikatan, dan tiap ikatan membutuhkan 1 H₂O, sehingga dibutuhkan 99 molekul air." },
+{ lv: 4, q: "Lipase menghidrolisis trigliserida menjadi asam lemak dan gliserol. Jika 5 mol trigliserida terhidrolisis sempurna, jumlah asam lemak yang dihasilkan adalah ...",
+  o: ["3 mol", "5 mol", "6 mol", "9 mol", "15 mol"], a: 4,
+  e: "1 trigliserida = 1 gliserol + 3 asam lemak (membutuhkan 3 H₂O). 5 mol × 3 = 15 mol asam lemak, dan gliserol yang dihasilkan 5 mol." },
+{ lv: 4, q: "Setiap hari sekitar 9 liter cairan (minuman dan getah pencernaan) masuk ke saluran pencernaan, dan ±98% di antaranya diserap kembali di usus. Volume cairan yang keluar bersama feses kira-kira ...",
+  o: ["18 mL", "90 mL", "180 mL", "900 mL", "1.800 mL"], a: 2,
+  e: "Sisa = 2% × 9.000 mL = 180 mL. Penyerapan air terutama terjadi di usus halus dan usus besar; kegagalan penyerapan menyebabkan diare." },
+{ lv: 4, q: "Aktivitas relatif amilase pankreas: 100% pada pH 7, 60% pada pH 8, dan 10% pada pH 2. Pada aktivitas 100%, enzim ini menghidrolisis 200 mg pati per menit. Pada pH 8 (cairan pankreas yang basa), pati yang dihidrolisis per menit adalah ...",
+  o: ["20 mg", "60 mg", "100 mg", "120 mg", "200 mg"], a: 3,
+  e: "60% × 200 mg = 120 mg per menit. Amilase pankreas masih cukup aktif pada pH basa di duodenum, sedangkan pada pH 2 hanya 20 mg per menit." },
+{ lv: 4, q: "Satu porsi makanan mengandung 30 g karbohidrat, 10 g protein, dan 8 g lemak. Dengan nilai energi karbohidrat 4 kkal/g, protein 4 kkal/g, dan lemak 9 kkal/g, energi total satu porsi adalah ...",
+  o: ["160 kkal", "192 kkal", "208 kkal", "220 kkal", "232 kkal"], a: 4,
+  e: "(30 × 4) + (10 × 4) + (8 × 9) = 120 + 40 + 72 = 232 kkal. Hasil 160 kkal muncul bila lemak terlupa dihitung, dan 192 kkal bila lemak dihitung 4 kkal/g." },
+{ lv: 4, q: "Sebuah porsi makanan memiliki energi total 232 kkal, dengan kandungan lemak 8 g (9 kkal/g). Persentase energi yang berasal dari lemak adalah ... (dibulatkan)",
+  o: ["17%", "31%", "41%", "72%", "83%"], a: 1,
+  e: "Energi dari lemak = 8 × 9 = 72 kkal. 72 ÷ 232 × 100% ≈ 31%, masih dalam anjuran kontribusi lemak 20–35% dari energi total. Pilihan 72% adalah jebakan karena itu angka kkal-nya, bukan persentase." },
+{ lv: 4, q: "Seorang remaja aktif (55 kg) membutuhkan protein 1,2 g/kg berat badan per hari. Ia sudah makan 2 butir telur (6 g protein per butir) dan 100 g tempe (18 g protein). Sisa kebutuhan protein hari itu adalah ...",
+  o: ["6 g", "18 g", "30 g", "36 g", "66 g"], a: 3,
+  e: "Kebutuhan = 1,2 × 55 = 66 g. Yang sudah terpenuhi = (2 × 6) + 18 = 30 g. Sisa = 66 − 30 = 36 g." },
+{ lv: 4, q: "Kategori IMT (kg/m²): < 18,5 kurus; 18,5–25,0 normal; 25,1–27,0 kelebihan berat badan; > 27,0 obesitas. Seorang siswa memiliki berat 72 kg dan tinggi 160 cm. IMT dan kategorinya adalah ...",
+  o: ["28,1; obesitas", "28,1; kelebihan berat badan", "22,5; normal", "45,0; obesitas", "18,0; kurus"], a: 0,
+  e: "IMT = berat ÷ tinggi² = 72 ÷ (1,6)² = 72 ÷ 2,56 ≈ 28,1, di atas 27,0 sehingga termasuk obesitas. Nilai 45,0 muncul bila tinggi lupa dikuadratkan (72 ÷ 1,6)." },
+{ lv: 5, q: "Seorang pelaut berlayar 4 bulan hanya makan makanan awetan (biskuit dan daging asin) tanpa buah atau sayur segar. Ia mengalami gusi bengkak dan mudah berdarah, luka lambat sembuh, serta lemas. Waktu pembekuan darahnya normal. Zat makanan yang paling mungkin kurang adalah ...",
+  o: ["vitamin A", "vitamin B₁", "vitamin D", "vitamin K", "vitamin C"], a: 4,
+  e: "Gejala skorbut (gusi berdarah, luka lambat sembuh) disebabkan kekurangan vitamin C yang banyak pada buah dan sayur segar; vitamin C diperlukan untuk sintesis kolagen. Pembekuan darah normal menyingkirkan kekurangan vitamin K." },
+{ lv: 4, q: "Orang dewasa membutuhkan ±150 µg iodium per hari. Garam beryodium di pasaran berkadar iodium 30 mg per kilogram garam (30 ppm). Seseorang mengonsumsi 5 g garam per hari. Iodium yang diperoleh dari garam tersebut adalah ...",
+  o: ["15 µg", "30 µg", "150 µg", "300 µg", "1.500 µg"], a: 2,
+  e: "30 mg/kg = 0,03 mg per gram. 5 g × 0,03 mg/g = 0,15 mg = 150 µg (1 mg = 1.000 µg), tepat memenuhi kebutuhan harian. Kekurangan iodium jangka panjang menyebabkan gondok." },
+{ lv: 4, q: "Label sebuah kemasan kue: berat bersih 250 g, takaran saji 50 g, energi 100 kkal per saji. Seorang remaja menghabiskan seluruh isi kemasan. Jika kebutuhan energinya 2.500 kkal per hari, kontribusi energi kue tersebut adalah ... dari kebutuhan hariannya.",
+  o: ["5%", "10%", "15%", "20%", "25%"], a: 3,
+  e: "Jumlah saji = 250 ÷ 50 = 5. Energi = 5 × 100 = 500 kkal. 500 ÷ 2.500 × 100% = 20%." },
+{ lv: 4, q: "Lima bahan makanan diuji dengan tiga pereaksi. Bahan yang mengandung amilum sekaligus protein, tetapi tidak mengandung gula pereduksi, adalah ...",
+  tb: { h: ["Bahan", "Iodin", "Biuret", "Benedict"], r: [["P", "Biru-hitam", "Biru", "Biru"], ["Q", "Cokelat", "Ungu", "Biru"], ["R", "Biru-hitam", "Ungu", "Biru"], ["S", "Cokelat", "Biru", "Merah bata"], ["T", "Cokelat", "Ungu", "Merah bata"]] },
+  o: ["P", "Q", "R", "S", "T"], a: 2,
+  e: "Iodin biru-hitam menandakan amilum, biuret ungu menandakan protein, dan Benedict yang tetap biru menandakan tidak ada gula pereduksi. Hanya bahan R yang memenuhi ketiganya. P hanya amilum, Q hanya protein, S hanya gula pereduksi, T protein dan gula pereduksi." },
+{ lv: 4, q: "Kebutuhan serat remaja ±25 g per hari. Hari ini seorang siswa sudah makan 2 buah apel (4 g serat per buah) dan 1 mangkuk oatmeal (4 g serat). Kacang merah rebus mengandung 7 g serat per 100 g. Agar kebutuhan serat tercukupi dari kacang merah, ia perlu makan sekitar ...",
+  o: ["100 g", "186 g", "250 g", "357 g", "400 g"], a: 1,
+  e: "Serat yang sudah diperoleh = (2 × 4) + 4 = 12 g. Sisa = 25 − 12 = 13 g. Kacang merah = 13 ÷ 7 × 100 g ≈ 186 g. Pilihan 357 g adalah jebakan karena mengabaikan serat yang sudah diperoleh." },
+{ lv: 5, q: "Neraca air harian normal: masuk 2.500 mL (minum 1.500; dari makanan 700; hasil metabolisme 300), keluar 2.500 mL (urin 1.500; feses 100; kulit dan napas 900). Jika seseorang hanya minum 1.000 mL dan komponen lain tetap, kondisi yang terjadi dan respons tubuhnya adalah ...",
+  o: ["defisit 500 mL; hormon ADH meningkat sehingga urin lebih sedikit dan pekat", "surplus 500 mL; hormon ADH menurun sehingga urin lebih banyak", "defisit 500 mL; hormon ADH menurun sehingga urin lebih banyak", "neraca tetap seimbang karena tubuh menyimpan air di usus besar", "surplus 500 mL; hormon ADH meningkat sehingga urin lebih pekat"], a: 0,
+  e: "Air masuk = 1.000 + 700 + 300 = 2.000 mL, keluar 2.500 mL, sehingga defisit 500 mL. Osmolaritas darah naik, hipotalamus memicu haus, dan ADH dilepas sehingga ginjal menyerap kembali air dan urin menjadi lebih sedikit dan pekat." },
+{ lv: 4, q: "Seorang atlet remaja membutuhkan 2.400 kkal per hari dengan 60% energi berasal dari karbohidrat (4 kkal/g). Kebutuhan karbohidratnya per hari adalah ...",
+  o: ["240 g", "300 g", "340 g", "360 g", "600 g"], a: 3,
+  e: "Energi dari karbohidrat = 60% × 2.400 = 1.440 kkal. Massa karbohidrat = 1.440 ÷ 4 = 360 g." },
+{ lv: 5, q: "Komposisi dua minyak goreng per 100 g lemak: Minyak A mengandung asam lemak jenuh 14 g dan tak jenuh 86 g; Minyak B mengandung jenuh 87 g dan tak jenuh 13 g. Pernyataan yang tepat adalah ...",
+  o: ["Minyak B lebih sehat karena lebih banyak mengandung lemak jenuh.", "Kedua minyak sama baiknya karena sama-sama lemak.", "Minyak B lebih baik karena lebih padat pada suhu ruang.", "Minyak A kurang sehat karena rasio tak jenuh : jenuh hanya 1 : 6.", "Minyak A lebih baik bagi pembuluh darah karena rasio tak jenuh : jenuh sekitar 6 : 1, sehingga cenderung tidak menaikkan LDL."], a: 4,
+  e: "Rasio minyak A = 86 : 14 ≈ 6 : 1, sedangkan minyak B = 13 : 87 ≈ 1 : 7. Asupan lemak jenuh yang tinggi cenderung meningkatkan LDL (“kolesterol jahat”) dan risiko aterosklerosis." },
+{ lv: 5, q: "Hasil pemeriksaan darah seorang bapak berusia 45 tahun dibandingkan batas anjuran berikut. Interpretasi dan saran yang paling tepat adalah ...",
+  tb: { h: ["Parameter", "Hasil", "Batas anjuran"], r: [["Kolesterol total", "240 mg/dL", "< 200"], ["LDL", "170 mg/dL", "< 130"], ["HDL", "35 mg/dL", "> 40"], ["Trigliserida", "175 mg/dL", "< 150"]] },
+  o: ["Risiko aterosklerosis tinggi: LDL dan trigliserida melebihi batas serta HDL di bawah batas; kurangi lemak jenuh, perbanyak serat dan aktivitas fisik.", "Semua parameter normal sehingga tidak perlu mengubah pola makan.", "Hanya HDL yang bermasalah sehingga disarankan menambah makanan berlemak jenuh.", "Risiko rendah karena HDL yang rendah menandakan sedikit lemak dalam darah.", "Hanya trigliserida yang bermasalah sehingga pola makan tidak perlu diubah."], a: 0,
+  e: "Keempat parameter menyimpang: kolesterol total, LDL, dan trigliserida di atas batas, HDL di bawah batas. Profil ini meningkatkan risiko aterosklerosis. Saran: kurangi lemak jenuh dan gorengan, perbanyak serat, dan rutin berolahraga." },
+{ lv: 5, q: "Seorang pasien mengeluh nyeri ulu hati yang muncul saat perut kosong dan mereda setelah makan, disertai mual dan tinja kehitaman. Uji napas urea menunjukkan hasil positif. Diagnosis dan penanganan yang paling tepat adalah ...",
+  o: ["gastritis akibat Escherichia coli; diobati dengan pencahar (laksatif)", "tukak lambung atau duodenum akibat infeksi Helicobacter pylori; diobati dengan antibiotik dan penurun asam lambung", "apendisitis; diobati dengan antasida", "hepatitis A; diobati dengan oralit", "intoleransi laktosa; diobati dengan menghindari semua makanan berserat"], a: 1,
+  e: "Tinja kehitaman menandakan perdarahan saluran cerna atas, dan uji napas urea positif menunjukkan bakteri H. pylori yang menghasilkan urease. Penanganan standar: kombinasi antibiotik dan penghambat produksi asam. E. coli, hepatitis A, dan intoleransi laktosa tidak sesuai dengan gejala." },
+{ lv: 4, q: "Seorang anak berat 10 kg mengalami diare. Setelah sehari berat badannya turun menjadi 9,5 kg (penurunan dianggap seluruhnya karena kehilangan cairan). Tingkat dehidrasinya dan penanganan awal yang tepat adalah ...",
+  o: ["0,5%; cukup minum teh manis", "1%; hentikan semua makanan dan minuman", "2%; berikan antibiotik", "5%; berikan oralit atau cairan rehidrasi oral dan segera periksa bila memburuk", "10%; langsung berikan obat penghenti diare"], a: 3,
+  e: "Penurunan 0,5 kg ÷ 10 kg × 100% = 5%. Diare membuat tubuh kehilangan air dan elektrolit; oralit menggantinya. Antibiotik dan obat penghenti diare tidak diberikan sembarangan." },
+{ lv: 5, q: "Seorang siswa buang air besar tiap 5–6 hari (normal 1 kali per 1–3 hari) dengan feses keras dan kecil. Pola hariannya: makan rendah serat dan minum hanya 800 mL. Penjelasan fisiologis yang paling tepat adalah ...",
+  o: ["peristaltik usus besar terlalu cepat sehingga air tidak sempat terserap", "hati menghasilkan terlalu banyak empedu sehingga feses mengeras", "serat dan cairan yang kurang memperlambat transit di usus besar sehingga air terserap berlebihan dan feses mengeras (konstipasi)", "enzim amilase berlebihan sehingga pati menumpuk di rektum", "dinding usus besar kehilangan kemampuan menyerap air sehingga feses encer"], a: 2,
+  e: "Serat menahan air dan merangsang peristaltik. Kekurangan serat dan cairan memperlambat transit, sehingga usus besar menyerap air terlalu banyak dan feses menjadi keras dan sulit keluar." },
+{ lv: 5, q: "Seorang remaja mengalami nyeri awal di sekitar pusar yang berpindah ke perut kanan bawah, demam 38,5 °C, dan mual. Hasil laboratorium: leukosit 15.000/µL (normal 4.000–11.000). Diagnosis dan tindak lanjut yang tepat adalah ...",
+  o: ["gastritis; cukup minum antasida di rumah", "hepatitis; istirahat dan makan tinggi lemak", "diare akut; berikan oralit saja", "konstipasi; perbanyak makan serat", "apendisitis (radang usus buntu); segera ke dokter karena kemungkinan perlu apendektomi sebelum pecah"], a: 4,
+  e: "Nyeri yang berpindah ke perut kanan bawah, demam, mual, dan leukosit tinggi (infeksi) khas apendisitis. Penundaan berisiko usus buntu pecah dan peritonitis." },
+{ lv: 4, q: "Seorang pasien hepatitis memiliki kadar SGPT (ALT) 300 U/L, dengan batas atas normal 40 U/L. Kadar SGPT pasien tersebut ... batas atas normal, dan peningkatan ini menandakan ...",
+  o: ["7,5 kali; kerusakan sel hati", "40 kali; kerusakan sel hati", "7,5 kali; gangguan penyerapan di usus", "75 kali; kerusakan sel hati", "260 kali; gangguan pankreas"], a: 0,
+  e: "300 ÷ 40 = 7,5 kali. SGPT (ALT) terutama berada di sel hati; saat sel hati rusak oleh virus hepatitis, enzim ini bocor ke darah sehingga kadarnya meningkat." },
+{ lv: 5, q: "Seorang wanita 45 tahun mengalami nyeri perut kanan atas yang menjalar ke bahu kanan setelah makan gorengan, disertai mual. Hasil USG menunjukkan batu 8 mm di kandung empedu. Penjelasan yang paling tepat adalah ...",
+  o: ["batu terbentuk dari asam lambung yang mengendap di lambung", "kolesterol atau bilirubin dalam empedu mengendap menjadi batu; lemak merangsang kandung empedu berkontraksi sehingga nyeri timbul saat batu menyumbat saluran", "batu terbentuk di pankreas karena amilase berlebihan", "batu terbentuk di usus besar karena kurang serat", "nyeri disebabkan pepsin yang merusak dinding lambung"], a: 1,
+  e: "Batu empedu terbentuk dari endapan kolesterol atau bilirubin. Makanan berlemak merangsang hormon kolesistokinin sehingga kandung empedu berkontraksi; bila batu menyumbat saluran, timbul nyeri kolik di perut kanan atas." },
+{ lv: 5, q: "Setelah minum 50 g laktosa, kadar glukosa darah seorang pasien hanya naik 12 mg/dL (normal naik > 20 mg/dL), disertai perut kembung dan diare. Penjelasan dan saran yang tepat adalah ...",
+  o: ["kekurangan amilase; hindari nasi dan roti", "kekurangan pepsin; hindari daging", "kekurangan laktase sehingga laktosa tidak terhidrolisis, difermentasi bakteri usus besar menghasilkan gas dan menarik air; pilih susu bebas laktosa", "alergi gluten; hindari gandum", "kekurangan lipase; hindari gorengan"], a: 2,
+  e: "Kenaikan glukosa yang rendah menunjukkan laktosa tidak terpecah menjadi glukosa dan galaktosa karena laktase kurang. Laktosa yang tidak dicerna difermentasi bakteri di usus besar, menghasilkan gas dan menarik air sehingga perut kembung dan diare." },
+{ lv: 5, q: "Seorang dewasa sering merasa panas di dada dan rasa asam di mulut setelah makan, terutama saat berbaring. Penyebab dan saran yang paling tepat adalah ...",
+  o: ["sfingter pilorus terlalu kuat menutup; makan lebih banyak makanan berlemak", "kerongkongan tidak berperistaltik sama sekali; makan sambil berbaring", "pankreas menghasilkan terlalu sedikit enzim; minum banyak kopi", "usus buntu meradang; segera makan makanan berserat tinggi", "sfingter kardia (esofagus bawah) tidak menutup sempurna sehingga asam lambung naik (GERD); makan porsi kecil, hindari berbaring 2–3 jam setelah makan, kurangi gorengan dan kopi"], a: 4,
+  e: "Gejala khas refluks asam (GERD): sfingter di antara kerongkongan dan lambung melemah sehingga asam naik, terutama saat berbaring. Perubahan kebiasaan makan membantu mengurangi gejala." },
+{ lv: 5, q: "Seorang pasien menjalani pengangkatan seluruh lambung (gastrektomi total). Satu tahun kemudian ia tampak pucat, lemas, mengalami kesemutan, dan sel darah merahnya berukuran besar (anemia megaloblastik). Penyebab yang paling tepat adalah ...",
+  o: ["sel parietal yang menghasilkan faktor intrinsik hilang sehingga vitamin B₁₂ tidak dapat diserap di ileum (anemia pernisiosa)", "pepsin hilang sehingga protein tidak dapat diserap sama sekali", "hati berhenti menghasilkan empedu sehingga vitamin C tidak terserap", "usus besar tidak lagi menyerap air sehingga darah menjadi encer", "kandung empedu menyempit sehingga zat besi tidak terserap"], a: 0,
+  e: "Faktor intrinsik dari sel parietal lambung diperlukan untuk menyerap vitamin B₁₂ di ileum. Tanpa lambung, B₁₂ kurang sehingga pembentukan sel darah merah terganggu dan sistem saraf ikut terpengaruh." },
+{ lv: 4, q: "Hasil survei terhadap 400 siswa SMA: 72 siswa mengalami gastritis (maag), 48 siswa diare, dan 20 siswa konstipasi dalam tiga bulan terakhir (tidak ada siswa yang mengalami lebih dari satu gangguan). Persentase siswa yang mengalami maag dan persentase siswa yang tidak mengalami ketiga gangguan tersebut adalah ...",
+  o: ["12% dan 65%", "18% dan 65%", "18% dan 35%", "20% dan 65%", "72% dan 35%"], a: 1,
+  e: "Maag = 72 ÷ 400 × 100% = 18%. Siswa yang bergangguan = 72 + 48 + 20 = 140, sehingga yang tidak mengalami = 400 − 140 = 260 siswa = 65%." }
+];
+/*SOAL-END*/
+
+const N = SOAL.length;
+const HURUF = "ABCDE";
+const TOPIK = ["Organ pencernaan", "Bioproses pencernaan", "Zat makanan", "Kelainan pencernaan"];
+const TOPIK_DESK = [
+  "Struktur dan ukuran organ, gigi, vili, hati, empedu",
+  "Enzim, pH, emulsi, penyerapan, hidrolisis",
+  "Energi, gizi, vitamin, mineral, uji makanan",
+  "Gastritis, diare, konstipasi, apendisitis, hepatitis"
+];
+const TOPIK_AKHIR = [12, 27, 40, 50];
+const topikDari = (i) => i < 12 ? 0 : i < 27 ? 1 : i < 40 ? 2 : 3;
+const KUNCI = SOAL.map((s) => HURUF[s.a]).join("");
+const KEY = "kuis-pencernaan-xi-v1";
+
+const $ = (id) => document.getElementById(id);
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  if (props) for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v === true) e.setAttribute(k, "");
+    else e.setAttribute(k, String(v));
+  }
+  for (const c of kids.flat()) {
+    if (c == null || c === false) continue;
+    e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  return e;
+}
+const fmtWaktu = (sec) => String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
+const fmtTgl = (ms) => ms ? new Date(ms).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) : "-";
+const rapikan = (s) => String(s || "").trim().replace(/\s+/g, " ");
+const pct = (a, b) => b ? Math.round((a / b) * 100) : 0;
+
+/* ---------- state ---------- */
+let S = null;
+function baru(nama, kelas) {
+  return { nama, kelas, jawab: Array(N).fill(-1), ragu: Array(N).fill(false), idx: 0, mulai: Date.now(), selesai: false, akhir: 0, jawaban: "", tersimpan: false };
+}
+function muat() {
+  try {
+    const r = localStorage.getItem(KEY);
+    if (!r) return null;
+    const o = JSON.parse(r);
+    if (o && Array.isArray(o.jawab) && o.jawab.length === N && Array.isArray(o.ragu)) return o;
+  } catch (e) { /* abaikan */ }
+  return null;
+}
+function simpanLokal() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* abaikan */ } }
+function hapusLokal() { try { localStorage.removeItem(KEY); } catch (e) { /* abaikan */ } }
+const strJawab = () => S.jawab.map((v) => v < 0 ? "-" : HURUF[v]).join("");
+
+function nilaiDari(str) {
+  let benar = 0, kosong = 0;
+  const per = TOPIK.map(() => [0, 0]);
+  for (let i = 0; i < N; i++) {
+    const t = topikDari(i);
+    per[t][1]++;
+    if (str[i] === "-") kosong++;
+    else if (str[i] === KUNCI[i]) { benar++; per[t][0]++; }
+  }
+  return { benar, kosong, salah: N - benar - kosong, nilai: benar * 2, per };
+}
+
+function show(n) {
+  ["mulai", "kuis", "hasil", "guru"].forEach((x) => { $("s-" + x).hidden = x !== n; });
+  window.scrollTo(0, 0);
+}
+
+/* ---------- layar mulai ---------- */
+function isiTopik() {
+  const jml = TOPIK.map((_, t) => SOAL.filter((__, i) => topikDari(i) === t).length);
+  const awal = [1, 13, 28, 41];
+  $("daftar-topik").replaceChildren(...TOPIK.map((t, i) => h("div", null,
+    h("dt", { text: t }),
+    h("dd", { text: "Soal " + awal[i] + "–" + TOPIK_AKHIR[i] + " (" + jml[i] + " soal)" }),
+    h("dd", { text: TOPIK_DESK[i] }))));
+}
+$("form-mulai").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const nama = rapikan($("nama").value), kelas = rapikan($("kelas").value);
+  const er = $("err-mulai");
+  if (nama.length < 3) { er.textContent = "Isi nama lengkap (minimal 3 huruf)."; er.hidden = false; $("nama").focus(); return; }
+  if (!kelas) { er.textContent = "Isi kelas, misalnya XI MIPA 2."; er.hidden = false; $("kelas").focus(); return; }
+  er.hidden = true;
+  S = baru(nama, kelas);
+  simpanLokal();
+  mulaiKuis();
+});
+
+/* ---------- layar kuis ---------- */
+let tmr = null;
+function tick() { $("waktu").textContent = fmtWaktu(Math.max(0, Math.floor((Date.now() - S.mulai) / 1000))); }
+function stopTimer() { if (tmr) { clearInterval(tmr); tmr = null; } }
+function mulaiKuis() {
+  $("sb-nama").textContent = S.nama;
+  $("sb-kelas").textContent = S.kelas;
+  $("konfirm").hidden = true;
+  stopTimer(); tick(); tmr = setInterval(tick, 1000);
+  renderSoal(); renderGrid(); updateBar();
+  show("kuis");
+}
+function tabel(tb) {
+  return h("div", { class: "tscroll" }, h("table", null,
+    h("thead", null, h("tr", null, tb.h.map((x) => h("th", { text: x })))),
+    h("tbody", null, tb.r.map((r) => h("tr", null, r.map((c) => h("td", { text: c })))))));
+}
+function renderSoal() {
+  const s = SOAL[S.idx];
+  $("kartu-soal").replaceChildren(
+    h("div", { class: "q-meta" },
+      h("span", { class: "chip chip-topic", text: TOPIK[topikDari(S.idx)] }),
+      h("span", { class: "q-no", text: "Soal " + (S.idx + 1) + " dari " + N })),
+    h("p", { class: "q-text", text: s.q }),
+    s.tb ? tabel(s.tb) : null,
+    h("div", { class: "opts", role: "radiogroup", "aria-label": "Pilihan jawaban" },
+      s.o.map((t, i) => h("button", { type: "button", class: "opt", role: "radio", "aria-checked": "false", onclick: () => pilih(i) },
+        h("span", { class: "ltr", text: HURUF[i] }), h("span", { class: "ot", text: t })))));
+  paintOpts();
+  $("btn-prev").disabled = S.idx === 0;
+  $("btn-next").disabled = S.idx === N - 1;
+  const rg = S.ragu[S.idx];
+  $("btn-ragu").setAttribute("aria-pressed", String(rg));
+  $("btn-ragu").textContent = rg ? "Ragu-ragu (klik untuk batal)" : "Tandai ragu-ragu";
+}
+function paintOpts() {
+  document.querySelectorAll("#kartu-soal .opt").forEach((b, i) => {
+    const on = S.jawab[S.idx] === i;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-checked", String(on));
+  });
+}
+function renderGrid() {
+  $("grid").replaceChildren(...SOAL.map((_, i) => h("button", {
+    type: "button",
+    class: "gb" + (S.jawab[i] >= 0 ? " done" : "") + (i === S.idx ? " cur" : "") + (S.ragu[i] ? " flag" : ""),
+    "aria-label": "Soal " + (i + 1) + (S.jawab[i] >= 0 ? ", sudah dijawab" : ", belum dijawab") + (S.ragu[i] ? ", ragu-ragu" : ""),
+    text: String(i + 1),
+    onclick: () => pergi(i)
+  })));
+}
+function updateBar() {
+  const n = S.jawab.filter((v) => v >= 0).length;
+  $("sb-jawab").textContent = n + "/" + N + " terjawab";
+  const p = (n / N) * 100;
+  $("jl-fill").style.width = p + "%";
+  $("jl-dot").style.left = p + "%";
+  [0, 25, 50, 75, 100].forEach((t, i) => $("jl-nodes").children[i].classList.toggle("on", p >= t && (t > 0 || n > 0)));
+}
+function pilih(i) {
+  S.jawab[S.idx] = S.jawab[S.idx] === i ? -1 : i;
+  simpanLokal(); paintOpts(); renderGrid(); updateBar();
+}
+function pergi(n) {
+  S.idx = Math.max(0, Math.min(N - 1, n));
+  $("konfirm").hidden = true;
+  simpanLokal(); renderSoal(); renderGrid();
+  window.scrollTo(0, 0);
+}
+$("btn-prev").addEventListener("click", () => pergi(S.idx - 1));
+$("btn-next").addEventListener("click", () => pergi(S.idx + 1));
+$("btn-ragu").addEventListener("click", () => { S.ragu[S.idx] = !S.ragu[S.idx]; simpanLokal(); renderSoal(); renderGrid(); });
+$("btn-kumpul").addEventListener("click", () => {
+  const kosong = [];
+  S.jawab.forEach((v, i) => { if (v < 0) kosong.push(i + 1); });
+  const rg = S.ragu.reduce((a, v) => a + (v ? 1 : 0), 0);
+  let t = "Kamu menjawab " + (N - kosong.length) + " dari " + N + " soal.";
+  if (kosong.length) t += " Soal yang masih kosong: " + kosong.join(", ") + ".";
+  if (rg) t += " " + rg + " soal masih ditandai ragu-ragu.";
+  t += " Setelah dikumpulkan, jawaban tidak dapat diubah.";
+  $("konfirm-teks").textContent = t;
+  $("konfirm").hidden = false;
+  $("konfirm").scrollIntoView({ block: "center" });
+});
+$("btn-batal").addEventListener("click", () => { $("konfirm").hidden = true; });
+$("btn-ya").addEventListener("click", selesai);
+document.addEventListener("keydown", (e) => {
+  if ($("s-kuis").hidden || !S || S.selesai) return;
+  const t = e.target;
+  if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key.toUpperCase();
+  if (k.length === 1 && HURUF.includes(k)) { pilih(HURUF.indexOf(k)); }
+  else if (e.key === "ArrowRight") pergi(S.idx + 1);
+  else if (e.key === "ArrowLeft") pergi(S.idx - 1);
+});
+
+/* ---------- simpan ke akun guru ---------- */
+async function dapatkan(nama) {
+  try {
+    if (!window.claude || typeof window.claude.use !== "function") return null;
+    return await window.claude.use(nama);
+  } catch (e) { return null; }
+}
+async function ulang(fn) {
+  try { return await fn(); }
+  catch (e) {
+    if (e && e.code === "unavailable") {
+      await new Promise((r) => setTimeout(r, 600 + Math.random() * 600));
+      return await fn();
+    }
+    throw e;
+  }
+}
+const slug = (nama, kelas) => (rapikan(nama) + "|" + rapikan(kelas)).toLowerCase().slice(0, 90);
+function payload() {
+  const nl = nilaiDari(S.jawaban);
+  return { nama: S.nama, kelas: S.kelas, jawaban: S.jawaban, benar: nl.benar, durasi: Math.max(0, Math.round((S.akhir - S.mulai) / 1000)), waktu: S.akhir };
+}
+async function kirimKeGuru() {
+  setSimpan("proses");
+  try {
+    const db = await dapatkan("db");
+    const user = await dapatkan("user");
+    const uid = user ? await user.id() : null;
+    if (!db || !uid) { setSimpan("nodb"); return; }
+    const ref = db.doc("hasil/" + uid);
+    const snap = await ulang(() => ref.get());
+    const cur = snap.exists ? (snap.data() || {}) : {};
+    const entri = Object.assign({}, cur.entri || {});
+    entri[slug(S.nama, S.kelas)] = payload();
+    await ulang(() => ref.set({ entri }));
+    S.tersimpan = true; simpanLokal();
+    setSimpan("ok");
+  } catch (e) {
+    setSimpan(e && e.code === "invalid_argument" ? "ditolak" : "gagal");
+  }
+}
+function enc(s) { const b = new TextEncoder().encode(s); let t = ""; b.forEach((x) => { t += String.fromCharCode(x); }); return btoa(t); }
+function dec(s) { const t = atob(s); return new TextDecoder().decode(Uint8Array.from(t, (c) => c.charCodeAt(0))); }
+function kode() {
+  const p = payload();
+  return "SP1." + enc(JSON.stringify({ n: p.nama, k: p.kelas, j: p.jawaban, d: p.durasi, t: p.waktu }));
+}
+async function salin(teks, ta, info) {
+  try { await navigator.clipboard.writeText(teks); info.textContent = "Tersalin."; }
+  catch (e) { if (ta) { ta.focus(); ta.select(); } info.textContent = "Salin manual: teks sudah dipilih, tekan Ctrl+C."; }
+}
+function setSimpan(st) {
+  const box = $("h-simpan");
+  const pesan = {
+    proses: ["notice", "Menyimpan hasil ke akun guru…"],
+    ok: ["notice ok", "Hasilmu sudah tersimpan di akun guru."],
+    nodb: ["notice warn", "Penyimpanan ke akun guru tidak tersedia pada tampilan ini (misalnya karena belum masuk akun atau membuka lewat tautan umum). Kirim kode hasil di bawah kepada gurumu."],
+    ditolak: ["notice warn", "Akunmu belum diizinkan menyimpan hasil pada kuis ini. Kirim kode hasil di bawah kepada gurumu."],
+    gagal: ["notice bad", "Hasil belum berhasil disimpan. Coba lagi, atau kirim kode hasil di bawah kepada gurumu."]
+  }[st];
+  const kids = [h("h3", { text: "Penyimpanan hasil" }), h("div", { class: pesan[0], role: "status", text: pesan[1] })];
+  if (st === "gagal") kids.push(h("div", { class: "row" }, h("button", { class: "btn btn-primary", type: "button", onclick: kirimKeGuru, text: "Coba simpan lagi" })));
+  if (st !== "ok" && st !== "proses") {
+    const ta = h("textarea", { readonly: true, "aria-label": "Kode hasil", rows: 3 });
+    ta.value = kode();
+    const info = h("span", { class: "small muted", role: "status" });
+    kids.push(ta, h("div", { class: "row" }, h("button", { class: "btn", type: "button", onclick: () => salin(ta.value, ta, info), text: "Salin kode hasil" }), info));
+  }
+  box.replaceChildren(...kids);
+  $("berikut-info").textContent = st === "ok" ? "" : "Pastikan hasil sudah tersimpan atau kodenya sudah dikirim sebelum lanjut.";
+}
+
+/* ---------- layar hasil ---------- */
+function selesai() {
+  stopTimer();
+  S.selesai = true; S.akhir = Date.now(); S.jawaban = strJawab();
+  simpanLokal();
+  renderHasil();
+  show("hasil");
+  kirimKeGuru();
+}
+let filterSalah = false;
+function renderHasil() {
+  const nl = nilaiDari(S.jawaban);
+  const dur = Math.max(0, Math.round((S.akhir - S.mulai) / 1000));
+  $("h-ket").textContent = S.nama + " · " + S.kelas;
+  $("h-nilai").textContent = String(nl.nilai);
+  $("h-pred").textContent = nl.nilai >= 85 ? "Sangat baik" : nl.nilai >= 70 ? "Baik" : nl.nilai >= 55 ? "Cukup" : "Perlu belajar lagi";
+  $("h-benar").textContent = String(nl.benar);
+  $("h-salah").textContent = String(nl.salah);
+  $("h-kosong").textContent = String(nl.kosong);
+  $("h-durasi").textContent = "Waktu pengerjaan " + fmtWaktu(dur) + " · dikumpulkan " + fmtTgl(S.akhir);
+  $("h-topik").replaceChildren(...TOPIK.map((t, i) => h("div", { class: "bar-row" },
+    h("span", { text: t }),
+    h("div", { class: "bar" }, h("i", { style: "width:" + pct(nl.per[i][0], nl.per[i][1]) + "%" })),
+    h("span", { class: "v", text: nl.per[i][0] + "/" + nl.per[i][1] }))));
+  renderReview();
+}
+function renderReview() {
+  const kids = [];
+  SOAL.forEach((s, i) => {
+    const ch = S.jawaban[i];
+    const benar = ch === KUNCI[i];
+    if (filterSalah && benar) return;
+    const status = ch === "-" ? ["pill mid", "Kosong"] : benar ? ["pill ok", "Benar"] : ["pill no", "Salah"];
+    kids.push(h("article", { class: "rv" },
+      h("div", { class: "q-meta" },
+        h("span", { class: "chip chip-topic", text: "Soal " + (i + 1) + " · " + TOPIK[topikDari(i)] }),
+        h("span", { class: status[0], text: status[1] })),
+      h("p", { class: "q-text", text: s.q }),
+      s.tb ? tabel(s.tb) : null,
+      h("div", { class: "opts" }, s.o.map((t, j) => {
+        const isKey = j === s.a, isMine = HURUF[j] === ch;
+        return h("div", { class: "opt static" + (isKey ? " kunci" : isMine ? " salah" : "") },
+          h("span", { class: "ltr", text: HURUF[j] }), h("span", { class: "ot", text: t }),
+          isKey ? h("span", { class: "tag", text: "Kunci" }) : isMine ? h("span", { class: "tag", text: "Jawabanmu" }) : null);
+      })),
+      h("div", { class: "e" }, h("b", { text: "Pembahasan: " }), s.e)));
+  });
+  if (!kids.length) kids.push(h("div", { class: "notice ok", text: "Semua jawabanmu benar. Tidak ada soal yang perlu ditinjau." }));
+  $("h-review").replaceChildren(...kids);
+}
+$("f-semua").addEventListener("click", () => { filterSalah = false; $("f-semua").setAttribute("aria-pressed", "true"); $("f-salah").setAttribute("aria-pressed", "false"); renderReview(); });
+$("f-salah").addEventListener("click", () => { filterSalah = true; $("f-semua").setAttribute("aria-pressed", "false"); $("f-salah").setAttribute("aria-pressed", "true"); renderReview(); });
+let konfBerikut = false;
+$("btn-berikut").addEventListener("click", () => {
+  if (!S.tersimpan && !konfBerikut) {
+    konfBerikut = true;
+    $("btn-berikut").textContent = "Hasil belum tersimpan. Klik lagi untuk tetap lanjut";
+    return;
+  }
+  konfBerikut = false;
+  $("btn-berikut").textContent = "Peserta berikutnya";
+  hapusLokal(); S = null;
+  $("nama").value = ""; $("kelas").value = "";
+  show("mulai");
+});
+
+/* ---------- panel guru ---------- */
+let unsub = null, DATA = [], terbuka = new Set(), hapusId = null;
+const KKM_KEY = "kuis-pencernaan-kkm";
+function bacaKkm() { try { const v = Number(localStorage.getItem(KKM_KEY)); if (v >= 0 && v <= 100 && localStorage.getItem(KKM_KEY) !== null) return v; } catch (e) { /* abaikan */ } return 75; }
+function bukaGuru() {
+  show("guru");
+  $("g-kkm").value = String(bacaKkm());
+  isiKunci();
+  if (unsub) { renderGuru(); return; }
+  $("g-status").textContent = "Memuat hasil siswa…";
+  (async () => {
+    const db = await dapatkan("db");
+    if (!db) { $("g-status").textContent = "Penyimpanan tidak tersedia pada tampilan ini, sehingga hasil siswa belum dapat dimuat."; return; }
+    const timer = setTimeout(() => { $("g-status").textContent = "Data belum dapat dijangkau. Masih mencoba terhubung…"; }, 10000);
+    unsub = db.collection("hasil").limit(1000).onSnapshot((snap) => {
+      if (!snap.metadata.fromCache) { clearTimeout(timer); $("g-status").textContent = "Terhubung. Data diperbarui otomatis saat siswa mengumpulkan."; }
+      DATA = snap.docs.map((d) => ({ doc: d.id, data: d.data() }));
+      renderGuru();
+    }, (err) => {
+      clearTimeout(timer); unsub = null;
+      $("g-status").textContent = "Hasil siswa gagal dimuat (" + ((err && err.code) || "error") + "). Muat ulang halaman untuk mencoba lagi.";
+    });
+  })();
+}
+function barisData() {
+  const out = [];
+  for (const { doc, data } of DATA) {
+    const en = data && data.entri;
+    if (!en || typeof en !== "object") continue;
+    for (const [key, d] of Object.entries(en)) {
+      if (!d || typeof d.jawaban !== "string" || !/^[A-E-]{50}$/.test(d.jawaban) || d.jawaban.length !== N) continue;
+      const nl = nilaiDari(d.jawaban);
+      out.push({ doc, key, id: doc + "::" + key, nama: String(d.nama || "").slice(0, 60), kelas: String(d.kelas || "").slice(0, 20), jawaban: d.jawaban, benar: nl.benar, salah: nl.salah, kosong: nl.kosong, nilai: nl.nilai, durasi: Number(d.durasi) || 0, waktu: Number(d.waktu) || 0 });
+    }
+  }
+  return out;
+}
+function baris() {
+  let rows = barisData();
+  const kelasPilih = $("g-kelas").value;
+  const kelasAda = [...new Set(rows.map((r) => r.kelas))].sort((a, b) => a.localeCompare(b, "id", { numeric: true }));
+  $("g-kelas").replaceChildren(h("option", { value: "", text: "Semua kelas" }), ...kelasAda.map((k) => h("option", { value: k, text: k })));
+  $("g-kelas").value = kelasAda.includes(kelasPilih) ? kelasPilih : "";
+  if ($("g-terakhir").checked) {
+    const m = new Map();
+    for (const r of rows) { const k = slug(r.nama, r.kelas); const p = m.get(k); if (!p || r.waktu > p.waktu) m.set(k, r); }
+    rows = [...m.values()];
+  }
+  if ($("g-kelas").value) rows = rows.filter((r) => r.kelas === $("g-kelas").value);
+  const q = rapikan($("g-cari").value).toLowerCase();
+  if (q) rows = rows.filter((r) => r.nama.toLowerCase().includes(q));
+  const u = $("g-urut").value;
+  rows.sort((a, b) => u === "nama" ? a.nama.localeCompare(b.nama, "id") : u === "waktu" ? b.waktu - a.waktu : (b.nilai - a.nilai) || a.nama.localeCompare(b.nama, "id"));
+  return rows;
+}
+let TERAKHIR = [];
+function renderGuru() {
+  const rows = baris();
+  TERAKHIR = rows;
+  const kkm = Number($("g-kkm").value) || 0;
+  const n = rows.length;
+  const rata = n ? rows.reduce((a, r) => a + r.nilai, 0) / n : 0;
+  const tuntas = rows.filter((r) => r.nilai >= kkm).length;
+  const st = (v, l) => h("div", null, h("b", { text: v }), h("span", { text: l }));
+  $("g-stats").replaceChildren(
+    st(String(n), "Peserta"),
+    st(n ? rata.toFixed(1).replace(".", ",") : "-", "Rata-rata"),
+    st(n ? String(Math.max(...rows.map((r) => r.nilai))) : "-", "Tertinggi"),
+    st(n ? String(Math.min(...rows.map((r) => r.nilai))) : "-", "Terendah"),
+    st(n ? tuntas + " (" + pct(tuntas, n) + "%)" : "-", "Mencapai KKM " + kkm));
+  const tb = $("g-tbody");
+  if (!n) {
+    tb.replaceChildren(h("tr", null, h("td", { colspan: "8", class: "muted", text: DATA.length ? "Tidak ada hasil yang cocok dengan filter." : "Belum ada siswa yang mengumpulkan. Hasil akan muncul di sini secara langsung." })));
+  } else {
+    const kids = [];
+    rows.forEach((r, i) => {
+      const aksi = hapusId === r.id
+        ? h("div", { class: "row" },
+            h("button", { class: "btn btn-sm btn-danger", type: "button", onclick: () => hapusEntri(r), text: "Ya, hapus" }),
+            h("button", { class: "btn btn-sm", type: "button", onclick: () => { hapusId = null; renderGuru(); }, text: "Batal" }))
+        : h("div", { class: "row" },
+            h("button", { class: "btn btn-sm", type: "button", onclick: () => { terbuka.has(r.id) ? terbuka.delete(r.id) : terbuka.add(r.id); renderGuru(); }, text: terbuka.has(r.id) ? "Tutup" : "Detail" }),
+            h("button", { class: "btn btn-sm", type: "button", onclick: () => { hapusId = r.id; renderGuru(); }, text: "Hapus" }));
+      kids.push(h("tr", null,
+        h("td", { class: "num", text: String(i + 1) }),
+        h("td", { text: r.nama }),
+        h("td", { text: r.kelas }),
+        h("td", { class: "num", text: r.benar + "/" + N }),
+        h("td", { class: "num" }, h("span", { class: "pill " + (r.nilai >= kkm ? "ok" : "no"), text: String(r.nilai) })),
+        h("td", { class: "num", text: fmtWaktu(r.durasi) }),
+        h("td", { text: fmtTgl(r.waktu) }),
+        h("td", null, aksi)));
+      if (terbuka.has(r.id)) {
+        kids.push(h("tr", null, h("td", { colspan: "8" },
+          h("div", { class: "detail" }, [...r.jawaban].map((c, j) => h("div", {
+            class: "dc " + (c === "-" ? "" : c === KUNCI[j] ? "ok" : "no"),
+            title: "Soal " + (j + 1) + ": jawaban " + (c === "-" ? "kosong" : c) + ", kunci " + KUNCI[j],
+            text: (j + 1) + (c === "-" ? "·–" : "·" + c) }))))));
+      }
+    });
+    tb.replaceChildren(...kids);
+  }
+  renderAnalisis(rows);
+}
+async function hapusEntri(r) {
+  hapusId = null;
+  try {
+    const db = await dapatkan("db");
+    if (!db) throw new Error("nodb");
+    const ref = db.doc("hasil/" + r.doc);
+    const snap = await ulang(() => ref.get());
+    const cur = snap.exists ? (snap.data() || {}) : {};
+    const e = Object.assign({}, cur.entri || {});
+    delete e[r.key];
+    if (Object.keys(e).length) await ulang(() => ref.set({ entri: e }));
+    else await ulang(() => ref.delete());
+    terbuka.delete(r.id);
+  } catch (e) {
+    $("g-status").textContent = "Gagal menghapus hasil. Coba lagi.";
+  }
+}
+function renderAnalisis(rows) {
+  const n = rows.length;
+  const benarPer = Array(N).fill(0);
+  const pilih = SOAL.map(() => ({ A: 0, B: 0, C: 0, D: 0, E: 0 }));
+  const topik = TOPIK.map(() => [0, 0]);
+  for (const r of rows) for (let i = 0; i < N; i++) {
+    const c = r.jawaban[i];
+    if (c === "-") continue;
+    if (c === KUNCI[i]) { benarPer[i]++; topik[topikDari(i)][0]++; } else pilih[i][c]++;
+  }
+  rows.forEach(() => { for (let i = 0; i < N; i++) topik[topikDari(i)][1]++; });
+  $("g-topik").replaceChildren(...TOPIK.map((t, i) => h("div", { class: "bar-row" },
+    h("span", { text: t }),
+    h("div", { class: "bar" }, h("i", { style: "width:" + pct(topik[i][0], topik[i][1]) + "%" })),
+    h("span", { class: "v", text: n ? pct(topik[i][0], topik[i][1]) + "%" : "-" }))));
+  $("g-butir").replaceChildren(...SOAL.map((s, i) => {
+    const p = n ? Math.round((benarPer[i] / n) * 100) : null;
+    const sal = Object.entries(pilih[i]).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1])[0];
+    const lab = p === null ? ["", "-"] : p < 40 ? ["pill no", "Sulit"] : p > 80 ? ["pill ok", "Mudah"] : ["pill mid", "Sedang"];
+    return h("tr", null,
+      h("td", { class: "num", text: String(i + 1) }),
+      h("td", { text: TOPIK[topikDari(i)] }),
+      h("td", { text: KUNCI[i] }),
+      h("td", null, h("span", { class: "mini" }, h("i", { style: "width:" + (p || 0) + "%" })), " ", p === null ? "-" : p + "%"),
+      h("td", null, h("span", { class: lab[0], text: lab[1] })),
+      h("td", { text: sal ? sal[0] + " (" + sal[1] + " siswa)" : "-" }));
+  }));
+}
+function isiKunci() {
+  const parts = [...KUNCI].map((c, i) => (i + 1) + "." + c);
+  $("g-keyline").textContent = parts.join("  ");
+  $("g-kunci-body").replaceChildren(...SOAL.map((s, i) => h("tr", null,
+    h("td", { class: "num", text: String(i + 1) }),
+    h("td", null, h("b", { text: KUNCI[i] })),
+    h("td", { text: TOPIK[topikDari(i)] }),
+    h("td", { text: "C" + s.lv }),
+    h("td", { text: s.e }))));
+}
+function csvSel(v) {
+  let s = String(v == null ? "" : v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+async function unduh(nama, teks, info) {
+  const dl = await dapatkan("downloads");
+  if (!dl) { info.textContent = "Unduhan tidak tersedia pada tampilan ini."; return; }
+  try { await dl.save({ filename: nama, data: "﻿" + teks }); info.textContent = "Berkas disimpan."; }
+  catch (e) { info.textContent = e && e.code === "declined" ? "Unduhan dibatalkan." : "Unduhan gagal."; }
+}
+$("g-csv").addEventListener("click", () => {
+  const head = ["No", "Nama", "Kelas", "Benar", "Salah", "Kosong", "Nilai", "Durasi", "Dikumpulkan", "Jawaban"];
+  const lines = [head.map(csvSel).join(",")];
+  TERAKHIR.forEach((r, i) => lines.push([i + 1, r.nama, r.kelas, r.benar, r.salah, r.kosong, r.nilai, fmtWaktu(r.durasi), fmtTgl(r.waktu), r.jawaban].map(csvSel).join(",")));
+  unduh("hasil-kuis-pencernaan.csv", lines.join("\r\n"), $("g-csv-info"));
+});
+$("g-csv-kunci").addEventListener("click", () => {
+  const lines = [["No", "Kunci", "Subtopik", "Level", "Pembahasan"].map(csvSel).join(",")];
+  SOAL.forEach((s, i) => lines.push([i + 1, KUNCI[i], TOPIK[topikDari(i)], "C" + s.lv, s.e].map(csvSel).join(",")));
+  unduh("kunci-kuis-pencernaan.csv", lines.join("\r\n"), $("g-kunci-info"));
+});
+$("g-salin-kunci").addEventListener("click", () => salin([...KUNCI].map((c, i) => (i + 1) + "." + c).join(" "), null, $("g-kunci-info")));
+["g-kelas", "g-urut", "g-terakhir"].forEach((id) => $(id).addEventListener("change", renderGuru));
+$("g-cari").addEventListener("input", renderGuru);
+$("g-kkm").addEventListener("input", () => { try { localStorage.setItem(KKM_KEY, String(Number($("g-kkm").value) || 0)); } catch (e) { /* abaikan */ } renderGuru(); });
+document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => {
+  const t = b.dataset.tab;
+  document.querySelectorAll(".panel").forEach((p) => { p.hidden = p.id !== "tab-" + t; });
+  document.querySelectorAll("[data-tab]").forEach((x) => x.setAttribute("aria-selected", String(x.dataset.tab === t)));
+}));
+$("btn-guru").addEventListener("click", bukaGuru);
+$("g-kembali").addEventListener("click", () => {
+  if (S && S.selesai) { renderHasil(); show("hasil"); }
+  else if (S) { show("kuis"); }
+  else show("mulai");
+});
+$("g-impor-btn").addEventListener("click", async () => {
+  const info = $("g-impor-info");
+  const toks = $("g-impor").value.split(/\s+/).filter(Boolean);
+  if (!toks.length) { info.textContent = "Tempel minimal satu kode."; return; }
+  const db = await dapatkan("db");
+  if (!db) { info.textContent = "Penyimpanan tidak tersedia pada tampilan ini."; return; }
+  let ok = 0, gagal = 0;
+  for (const t of toks) {
+    try {
+      if (!t.startsWith("SP1.")) throw new Error("format");
+      const o = JSON.parse(dec(t.slice(4)));
+      const j = String(o.j || "");
+      const nama = rapikan(o.n).slice(0, 60), kelas = rapikan(o.k).slice(0, 20);
+      if (!nama || !kelas || !/^[A-E-]{50}$/.test(j) || j.length !== N) throw new Error("isi");
+      const nl = nilaiDari(j);
+      const id = "impor-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      await ulang(() => db.doc("hasil/" + id).set({ entri: { [slug(nama, kelas)]: { nama, kelas, jawaban: j, benar: nl.benar, durasi: Math.max(0, Number(o.d) || 0), waktu: Number(o.t) || Date.now() } } }));
+      ok++;
+    } catch (e) { gagal++; }
+  }
+  info.textContent = ok + " kode berhasil diimpor" + (gagal ? ", " + gagal + " kode tidak valid atau gagal." : ".");
+  if (ok && !gagal) $("g-impor").value = "";
+});
+
+/* ---------- mulai ---------- */
+if (SOAL.length !== 50) console.error("Jumlah soal harus 50, sekarang " + SOAL.length);
+isiTopik();
+const lama = muat();
+if (lama) {
+  S = lama;
+  $("nama").value = S.nama || ""; $("kelas").value = S.kelas || "";
+  if (S.selesai) { renderHasil(); show("hasil"); if (S.tersimpan) setSimpan("ok"); else kirimKeGuru(); }
+  else { mulaiKuis(); }
+} else { show("mulai"); }
+
+(async () => {
+  const user = await dapatkan("user");
+  let guru = false;
+  if (user) { try { guru = (await user.canEdit()) || (await user.isOwner()); } catch (e) { guru = false; } }
+  $("btn-guru").hidden = !guru;
+  const db = await dapatkan("db");
+  $("info-simpan").textContent = db ? "Hasil akan tersimpan di akun guru." : "Penyimpanan ke akun guru belum aktif di tampilan ini; kamu akan menerima kode hasil.";
+})();
+})();
+</script>
+
+</body></html>
